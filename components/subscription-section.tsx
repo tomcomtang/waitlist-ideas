@@ -39,30 +39,41 @@ export default function SubscriptionSection({
         </div>
         
         <form
-          className="relative w-full tablet:row-start-3 tablet:col-start-2"
+          className="relative w-full tablet:row-start-3 tablet:col-start-2 space-y-3"
           onSubmit={(e) => {
             e.preventDefault();
             handleSubmit();
           }}
         >
+          <label className="block">
+            <span className="sr-only">Your name</span>
+            <input
+              type="text"
+              placeholder="Your name"
+              className="text-lg leading-[1.2] border border-input-border rounded-full w-full transition-colors px-5 py-3 tablet:py-3.5 placeholder:opacity-60 hover:border-white focus:border-white focus:outline-none bg-transparent text-white"
+              name="name"
+              value={name}
+              onChange={handleNameChange}
+            />
+          </label>
           <label className="relative block">
             <span className="sr-only">Your email here</span>
             <input
-              type="text"
+              type="email"
               placeholder="Your email here"
               className="text-lg leading-[1.2] border border-input-border rounded-full w-full transition-colors px-5 py-3 tablet:py-3.5 placeholder:opacity-60 hover:border-white focus:border-white focus:outline-none pr-[110px] bg-transparent text-white"
               name="email"
               value={email}
               onChange={handleEmailChange}
             />
+            <button
+              type="submit"
+              disabled={loading}
+              className="absolute right-2 top-2 bottom-2 cursor-pointer text-sm leading-none rounded-full button-gradient px-4 tablet:px-5 laptop:text-base laptop:px-6 disabled:opacity-70 disabled:cursor-default text-white font-medium h-auto"
+            >
+              {loading ? "Joining..." : "Join Waitlist"}
+            </button>
           </label>
-          <button
-            type="submit"
-            disabled={loading}
-            className="absolute right-2 top-2 bottom-2 cursor-pointer text-sm leading-none rounded-full button-gradient px-4 tablet:px-5 laptop:text-base laptop:px-6 disabled:opacity-70 disabled:cursor-default text-white font-medium h-auto"
-          >
-            {loading ? "Subscribing..." : "Subscribe"}
-          </button>
         </form>
       </div>
     </motion.div>

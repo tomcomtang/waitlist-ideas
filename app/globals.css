@@ -102,3 +102,125 @@
     background-position: 200% 0;
   }
 }
+
+/* Toast 容器 */
+[data-sonner-toaster] {
+  pointer-events: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+[data-sonner-toaster] > * {
+  pointer-events: auto !important;
+}
+
+/* ol 和 li 居中 */
+[data-sonner-toaster] ol {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  list-style: none !important;
+}
+
+[data-sonner-toaster] li {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  margin: 0 auto !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Toast 卡片 - li 作为父容器，使用 flex 让 icon 和 content 在同一行并整体居中 */
+[data-sonner-toast],
+li[data-sonner-toast] {
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 24px !important;
+  width: 400px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  padding: 16px 20px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0 !important;
+  flex-wrap: nowrap !important;
+}
+
+/* 创建一个包装器让 icon 和 content 作为一个整体 */
+[data-sonner-toast] > div[data-icon] + div[data-content],
+li[data-sonner-toast] > div[data-icon] + div[data-content] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+[data-sonner-toast][data-theme="dark"] {
+  background: rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Icon - 显示，固定尺寸，紧挨文案 */
+[data-sonner-toast] > div[data-icon],
+li[data-sonner-toast] > div[data-icon] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  width: 20px !important;
+  height: 20px !important;
+  margin: 0 4px 0 0 !important;
+  padding: 0 !important;
+}
+
+/* Content - 不换行，超出显示省略号，不自适应宽度 */
+[data-sonner-toast] > div[data-content],
+li[data-sonner-toast] > div[data-content] {
+  flex: 0 1 auto !important;
+  min-width: 0 !important;
+  max-width: calc(100% - 24px) !important;
+  display: block !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* Title - 不换行，超出显示省略号 */
+[data-sonner-toast] [data-title],
+li[data-sonner-toast] [data-title] {
+  display: block !important;
+  text-align: center !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  width: 100% !important;
+}
+
+[data-sonner-toast] > div[data-content] > div,
+li[data-sonner-toast] > div[data-content] > div {
+  text-align: center !important;
+  width: 100% !important;
+  display: block !important;
+}
+
+/* 文字居中 */
+[data-sonner-toast] [data-title],
+[data-sonner-toast] [data-description] {
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-align: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  word-wrap: break-word !important;
+}

@@ -28,11 +28,19 @@ export default function Home() {
   };
 
   const handleSubmit = async () => {
-    if (!name || !email) {
-      toast.error("Please fill in all fields");
+    // 检查 Name 是否为空
+    if (!name || name.trim() === "") {
+      toast.error("Please enter your name");
       return;
     }
 
+    // 检查 Email 是否为空
+    if (!email || email.trim() === "") {
+      toast.error("Please enter your email address");
+      return;
+    }
+
+    // 检查邮箱格式是否正确
     if (!isValidEmail(email)) {
       toast.error("Please enter a valid email address");
       return;
@@ -42,26 +50,7 @@ export default function Home() {
 
     const promise = new Promise(async (resolve, reject) => {
       try {
-        // First, attempt to send the email
-        const mailResponse = await fetch("/api/mail", {
-          cache: "no-store",
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ firstname: name, email }),
-        });
-
-        if (!mailResponse.ok) {
-          if (mailResponse.status === 429) {
-            reject("Rate limited");
-          } else {
-            reject("Email sending failed");
-          }
-          return;
-        }
-
-        // If email sending is successful, proceed to insert into Notion
+        // 直接提交到 Notion（邮件发送功能暂时跳过）
         const notionResponse = await fetch("/api/notion", {
           method: "POST",
           headers: {
@@ -74,7 +63,13 @@ export default function Home() {
           if (notionResponse.status === 429) {
             reject("Rate limited");
           } else {
-            reject("Notion insertion failed");
+            // 尝试获取详细的错误信息
+            try {
+              const errorData = await notionResponse.json();
+              reject(errorData.error || "Notion insertion failed");
+            } catch {
+              reject("Notion insertion failed");
+            }
           }
         } else {
           resolve({ name });
@@ -89,17 +84,19 @@ export default function Home() {
       success: (data) => {
         setName("");
         setEmail("");
-        return "Welcome to the waitlist! 🎉";
+        return "Welcome to the waitlist! ";
       },
       error: (error) => {
         if (error === "Rate limited") {
           return "Too many requests. Please try again later";
-        } else if (error === "Email sending failed") {
-          return "Failed to send email. Please try again";
-        } else if (error === "Notion insertion failed") {
-          return "Failed to save your details. Please try again";
+        } else if (typeof error === "string" && error.includes("Database not found")) {
+          return "Database configuration error. Please contact support.";
+        } else if (typeof error === "string" && error.includes("Unauthorized")) {
+          return "Authentication error. Please contact support.";
+        } else if (typeof error === "string") {
+          return error;
         }
-        return "An error occurred. Please try again";
+        return "Failed to save your details. Please try again";
       },
     });
 
@@ -111,7 +108,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center overflow-x-hidden relative">
       <CanvasBackground />
-      
+
       <section className="flex flex-1 w-full flex-col items-center px-4 py-12 sm:px-6 lg:px-8 lg:py-24 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -120,7 +117,7 @@ export default function Home() {
           className="w-full max-w-6xl"
         >
           <HeroSection />
-          
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
