@@ -42,6 +42,28 @@ export async function POST(request: Request) {
     // 处理数据库ID格式（移除连字符）
     const dbId = process.env.NOTION_DB.replace(/-/g, "");
     
+    // 检查邮箱是否已存在
+    console.log("Checking if email already exists:", {
+      email: body.email.substring(0, 10) + "...",
+    });
+    
+    const existingRecords = await notion.databases.query({
+      database_id: dbId,
+      filter: {
+        property: "Email",
+        email: {
+          equals: body.email,
+        },
+      },
+    });
+    
+    if (existingRecords.results && existingRecords.results.length > 0) {
+      return NextResponse.json(
+        { success: false, error: "This email is already registered. Please use a different email address." },
+        { status: 409 }
+      );
+    }
+    
     // 生成唯一 ID（使用时间戳 + 随机数）
     const uniqueId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
     // 获取当前时间
@@ -89,6 +111,10 @@ export async function POST(request: Request) {
               },
             },
           ],
+        },
+        "Email Sent": {
+          type: "checkbox",
+          checkbox: false,
         },
       },
     });

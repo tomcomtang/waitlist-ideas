@@ -179,6 +179,20 @@ li[data-sonner-toast] > div[data-icon] {
   padding: 0 !important;
 }
 
+/* 错误类型的 icon 显示为红色 */
+[data-sonner-toast][data-type="error"] > div[data-icon] svg,
+li[data-sonner-toast][data-type="error"] > div[data-icon] svg {
+  color: #ef4444 !important;
+  fill: #ef4444 !important;
+}
+
+/* 成功类型的 icon 显示为浅绿色 */
+[data-sonner-toast][data-type="success"] > div[data-icon] svg,
+li[data-sonner-toast][data-type="success"] > div[data-icon] svg {
+  color: #22c55e !important;
+  fill: #22c55e !important;
+}
+
 /* Content - 不换行，超出显示省略号，不自适应宽度 */
 [data-sonner-toast] > div[data-content],
 li[data-sonner-toast] > div[data-content] {

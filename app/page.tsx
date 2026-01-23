@@ -50,7 +50,7 @@ export default function Home() {
 
     const promise = new Promise(async (resolve, reject) => {
       try {
-        // 直接提交到 Notion（邮件发送功能暂时跳过）
+        // 1. 先提交到 Notion
         const notionResponse = await fetch("/api/notion", {
           method: "POST",
           headers: {
@@ -62,6 +62,14 @@ export default function Home() {
         if (!notionResponse.ok) {
           if (notionResponse.status === 429) {
             reject("Rate limited");
+          } else if (notionResponse.status === 409) {
+            // 邮箱已存在
+            try {
+              const errorData = await notionResponse.json();
+              reject(errorData.error || "This email is already registered");
+            } catch {
+              reject("This email is already registered");
+            }
           } else {
             // 尝试获取详细的错误信息
             try {
@@ -71,9 +79,38 @@ export default function Home() {
               reject("Notion insertion failed");
             }
           }
-        } else {
-          resolve({ name });
+          return;
         }
+
+        // 2. Notion 提交成功后，调用邮件接口发送欢迎邮件
+        try {
+          const mailResponse = await fetch("/api/mail", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              firstname: name,
+              email: email
+            }),
+          });
+
+          if (!mailResponse.ok) {
+            const mailErrorData = await mailResponse.json();
+            // 如果邮件已发送过，不影响整体流程
+            if (mailResponse.status === 200 && mailErrorData.message?.includes("already been sent")) {
+              console.log("Email already sent, continuing...");
+            } else {
+              console.warn("Failed to send email:", mailErrorData);
+              // 邮件发送失败不影响整体流程，因为 Notion 已保存
+            }
+          }
+        } catch (mailError) {
+          // 邮件发送失败不影响整体流程，只记录日志
+          console.warn("Error calling mail API:", mailError);
+        }
+
+        resolve({ name });
       } catch (error) {
         reject(error);
       }
