@@ -73,7 +73,6 @@
   }
 }
 
-/* 作品集风格背景动画 */
 @keyframes gradientShift {
   0%, 100% {
     background-position: 0% 50%;
@@ -103,7 +102,6 @@
   }
 }
 
-/* Toast 容器 */
 [data-sonner-toaster] {
   pointer-events: none !important;
   display: flex !important;
@@ -115,7 +113,6 @@
   pointer-events: auto !important;
 }
 
-/* ol 和 li 居中 */
 [data-sonner-toaster] ol {
   display: flex !important;
   flex-direction: column !important;
@@ -134,7 +131,6 @@
   flex-wrap: nowrap !important;
 }
 
-/* Toast 卡片 - li 作为父容器，使用 flex 让 icon 和 content 在同一行并整体居中 */
 [data-sonner-toast],
 li[data-sonner-toast] {
   background: rgba(255, 255, 255, 0.08) !important;
@@ -154,7 +150,6 @@ li[data-sonner-toast] {
   flex-wrap: nowrap !important;
 }
 
-/* 创建一个包装器让 icon 和 content 作为一个整体 */
 [data-sonner-toast] > div[data-icon] + div[data-content],
 li[data-sonner-toast] > div[data-icon] + div[data-content] {
   display: flex !important;
@@ -166,7 +161,6 @@ li[data-sonner-toast] > div[data-icon] + div[data-content] {
   background: rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Icon - 显示，固定尺寸，紧挨文案 */
 [data-sonner-toast] > div[data-icon],
 li[data-sonner-toast] > div[data-icon] {
   display: flex !important;
@@ -179,21 +173,18 @@ li[data-sonner-toast] > div[data-icon] {
   padding: 0 !important;
 }
 
-/* 错误类型的 icon 显示为红色 */
 [data-sonner-toast][data-type="error"] > div[data-icon] svg,
 li[data-sonner-toast][data-type="error"] > div[data-icon] svg {
   color: #ef4444 !important;
   fill: #ef4444 !important;
 }
 
-/* 成功类型的 icon 显示为浅绿色 */
 [data-sonner-toast][data-type="success"] > div[data-icon] svg,
 li[data-sonner-toast][data-type="success"] > div[data-icon] svg {
   color: #22c55e !important;
   fill: #22c55e !important;
 }
 
-/* Content - 不换行，超出显示省略号，不自适应宽度 */
 [data-sonner-toast] > div[data-content],
 li[data-sonner-toast] > div[data-content] {
   flex: 0 1 auto !important;
@@ -209,7 +200,6 @@ li[data-sonner-toast] > div[data-content] {
   white-space: nowrap !important;
 }
 
-/* Title - 不换行，超出显示省略号 */
 [data-sonner-toast] [data-title],
 li[data-sonner-toast] [data-title] {
   display: block !important;
@@ -227,7 +217,6 @@ li[data-sonner-toast] > div[data-content] > div {
   display: block !important;
 }
 
-/* 文字居中 */
 [data-sonner-toast] [data-title],
 [data-sonner-toast] [data-description] {
   color: rgba(255, 255, 255, 0.9) !important;

@@ -18,7 +18,6 @@ export default function CanvasBackground() {
         scale={1}
         style={{ width: '100%', height: '100%' }}
       />
-      {/* 深色叠加层，使整体变暗 */}
       <div className="absolute inset-0 bg-black/30" />
     </div>
   );

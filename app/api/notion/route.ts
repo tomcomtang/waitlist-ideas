@@ -5,7 +5,6 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    // 验证必要参数
     if (!body?.email) {
       return NextResponse.json(
         { success: false, error: "Email is required" },
@@ -20,7 +19,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // 验证环境变量
     if (!process.env.NOTION_SECRET) {
       console.error("NOTION_SECRET is not configured");
       return NextResponse.json(
@@ -39,10 +37,8 @@ export async function POST(request: Request) {
 
     const notion = new Client({ auth: process.env.NOTION_SECRET });
     
-    // 处理数据库ID格式（移除连字符）
     const dbId = process.env.NOTION_DB.replace(/-/g, "");
     
-    // 检查邮箱是否已存在
     console.log("Checking if email already exists:", {
       email: body.email.substring(0, 10) + "...",
     });
@@ -64,9 +60,7 @@ export async function POST(request: Request) {
       );
     }
     
-    // 生成唯一 ID（使用时间戳 + 随机数）
     const uniqueId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-    // 获取当前时间
     const currentTime = new Date().toISOString();
     
     console.log("Creating Notion page with:", {
@@ -135,7 +129,6 @@ export async function POST(request: Request) {
       body: error.body,
     });
     
-    // 处理 Notion API 特定错误
     if (error.code === "object_not_found") {
       return NextResponse.json(
         { success: false, error: "Database not found. Please check your NOTION_DB configuration." },
@@ -150,7 +143,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // 处理验证错误
     if (error.code === "validation_error") {
       return NextResponse.json(
         { 
@@ -161,7 +153,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // 返回详细错误信息（开发环境）
     const errorMessage = process.env.NODE_ENV === "development" 
       ? `${error.message || "Failed to save to Notion"} (Code: ${error.code || "unknown"})`
       : "Failed to save to Notion. Please try again later.";
