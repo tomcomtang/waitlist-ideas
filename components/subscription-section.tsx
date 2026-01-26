@@ -35,7 +35,7 @@ export default function SubscriptionSection({
         </h2>
         
         <div className="mb-5 text-base leading-[1.2] tablet:text-lg tablet:row-start-2 tablet:col-start-2 laptop:mb-6 laptop:text-xl">
-          <p>Just one email — we'll let you know when we launch. No follow-ups, no spam. Deal?</p>
+          <p>Just one email — we&apos;ll let you know when we launch. No follow-ups, no spam. Deal?</p>
         </div>
         
         <form

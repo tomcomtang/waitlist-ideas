@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   title: "Waitlist Ideas - Join the Waitlist",
   description:
     "Join our waitlist to get early access and stay updated on the latest features and updates.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
