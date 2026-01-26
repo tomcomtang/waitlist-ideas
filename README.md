@@ -1,157 +1,150 @@
-# Waitlist Ideas - Next.js 15 Waitlist Template
+# Waitlist Ideas
 
-A modern, beautiful waitlist template built with Next.js 15, featuring Notion CMS integration, Resend email service, and Upstash Redis rate limiting.
+A modern waitlist landing page built with Next.js 15. Collect user signups, store them in Notion, and send welcome emails automatically.
 
 ## Features
 
-- **Next.js 15**: Built with the latest Next.js framework
-- **Notion as CMS**: Manage your waitlist users directly in Notion
-- **Resend Email**: Send beautiful welcome emails to new signups
-- **Upstash Redis**: Rate limiting to prevent abuse
-- **Modern UI**: Beautiful, responsive design with smooth animations
-- **TypeScript**: Fully typed for better developer experience
-- **Tailwind CSS**: Utility-first CSS framework
-- **Framer Motion**: Smooth animations and transitions
+- ✅ **Notion Integration**: Automatically save signups to your Notion database
+- ✅ **Email Notifications**: Send beautiful welcome emails via Resend
+- ✅ **Duplicate Prevention**: Prevents duplicate email registrations
+- ✅ **Email Tracking**: Tracks whether welcome emails have been sent
+- ✅ **Modern Design**: Glassmorphism effects with animated background
+- ✅ **Responsive Layout**: Fully responsive design that works on all devices
+- ✅ **Type-Safe**: Built with TypeScript for better developer experience
+- ✅ **Real-time Feedback**: Toast notifications for user actions
 
-## Getting Started
+## Quick Start
 
-### Prerequisites
-
-- Node.js 18+ or Bun
-- A Notion account and workspace
-- A Resend account
-- An Upstash Redis database
-
-### Installation
-
-1. Clone the repository:
-
-```bash
-git clone <your-repo-url>
-cd waitlist-ideas
-```
-
-2. Install dependencies:
+### 1. Install Dependencies
 
 ```bash
 npm install
-# or
-bun install
 ```
 
-3. Set up environment variables:
+### 2. Configure Environment Variables
 
 Create a `.env.local` file in the root directory:
 
 ```env
-NOTION_SECRET=your_notion_secret
-NOTION_DB=your_notion_database_id
-RESEND_API_KEY=your_resend_api_key
-UPSTASH_REDIS_REST_URL=your_upstash_redis_url
-UPSTASH_REDIS_REST_TOKEN=your_upstash_redis_token
+NOTION_SECRET=your_notion_secret_here
+NOTION_DB=your_notion_database_id_here
+RESEND_API_KEY=your_resend_api_key_here
 ```
 
-### Setting Up Notion
+### 3. Set Up Notion Database
 
 1. Create a new database in your Notion workspace
-2. Add the following columns:
+2. Add the following properties:
    - **Name**: Title type
    - **Email**: Email type
-3. Create an internal integration at [Notion Integrations](https://www.notion.so/my-integrations)
+   - **Time**: Date type
+   - **ID**: Text type
+   - **Email Sent**: Checkbox type
+3. Create an integration at [Notion Integrations](https://www.notion.so/my-integrations)
 4. Copy the integration secret (this is your `NOTION_SECRET`)
 5. Share your database with the integration
 6. Get your database ID from the URL: `https://www.notion.so/{DATABASE_ID}?v=...`
 
-### Setting Up Resend
+### 4. Set Up Resend (Optional)
 
 1. Sign up at [Resend](https://resend.com)
-2. Add and verify your domain
-3. Generate an API key from the dashboard
-4. Update the email sender in `app/api/mail/route.ts` with your verified domain
+2. For testing, you can use the default test email `onboarding@resend.dev`
+3. For production, verify your domain and update `RESEND_FROM_EMAIL` in `.env.local`
 
-### Setting Up Upstash Redis
-
-1. Sign up at [Upstash](https://upstash.com)
-2. Create a new Redis database
-3. Copy the REST URL and REST Token
-
-### Running the Development Server
+### 5. Start Development Server
 
 ```bash
 npm run dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Visit http://localhost:3000
 
-### Building for Production
+### 6. Build for Production
 
 ```bash
 npm run build
 npm start
-# or
-bun build
-bun start
 ```
+
+## Deploy
+
+[![Deploy with EdgeOne Pages](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?from=github&template=waitlist-ideas)
 
 ## Project Structure
 
 ```
-waitlist-ideas/
 ├── app/
 │   ├── api/
 │   │   ├── mail/
-│   │   │   └── route.ts      # Email sending API
+│   │   │   └── route.ts          # Email sending API
 │   │   └── notion/
-│   │       └── route.ts      # Notion integration API
-│   ├── globals.css           # Global styles
-│   ├── layout.tsx            # Root layout
-│   └── page.tsx              # Home page
+│   │       └── route.ts          # Notion integration API
+│   ├── globals.css               # Global styles
+│   ├── layout.tsx                # Root layout
+│   └── page.tsx                  # Home page
 ├── components/
-│   ├── ui/                   # Reusable UI components
-│   ├── footer.tsx            # Footer component
-│   ├── hero-section.tsx      # Hero section
-│   ├── waitlist-form.tsx     # Waitlist form
-│   └── feature-cards.tsx     # Feature cards
+│   ├── ui/                       # Reusable UI components
+│   ├── canvas-background.tsx     # Animated background
+│   ├── footer.tsx                # Footer component
+│   ├── hero-section.tsx          # Hero section
+│   └── subscription-section.tsx  # Waitlist form
 ├── emails/
-│   └── index.tsx             # Email template
+│   └── index.tsx                 # Welcome email template
 ├── lib/
-│   └── utils.ts              # Utility functions
-└── public/                   # Static assets
+│   └── utils.ts                  # Utility functions
+└── package.json
 ```
 
-## Customization
+## How It Works
 
-### Styling
+1. **User Signup**: User enters name and email on the landing page
+2. **Validation**: Frontend validates email format and required fields
+3. **Notion Storage**: User data is saved to Notion database
+4. **Duplicate Check**: System checks if email already exists before saving
+5. **Email Sending**: Welcome email is sent via Resend (if configured)
+6. **Status Tracking**: Email sent status is tracked in Notion database
+7. **User Feedback**: Toast notifications provide real-time feedback
 
-The project uses Tailwind CSS. You can customize colors and styles in:
-- `app/globals.css` - CSS variables for theming
-- `tailwind.config.ts` - Tailwind configuration
+## Technology Stack
 
-### Email Template
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion
+- **Background**: @paper-design/shaders-react
+- **Database**: Notion API
+- **Email**: Resend
+- **UI Components**: Radix UI, Sonner (toasts)
+
+## Development
+
+### Customizing Styles
+
+Modify `app/globals.css` to customize the appearance. The design uses:
+
+- Glassmorphism effects (backdrop-filter, transparency)
+- Purple gradient theme
+- Dark background with animated shaders
+
+### Customizing Email Template
 
 Edit `emails/index.tsx` to customize the welcome email sent to new signups.
 
-### UI Components
+### API Endpoints
 
-All UI components are in the `components/` directory. You can modify them to match your brand.
+- `POST /api/notion` - Save user signup to Notion
+  - Body: `{ name: string, email: string }`
+  - Returns: `{ success: boolean, id?: string, error?: string }`
 
-## Deployment
-
-### Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Import your repository in Vercel
-3. Add your environment variables
-4. Deploy!
-
-The project is optimized for Vercel deployment.
+- `POST /api/mail` - Send welcome email
+  - Body: `{ email: string, firstname: string }`
+  - Returns: `{ message: string, error?: string }`
+  - Automatically checks if email was already sent
 
 ## License
 
-MIT License - feel free to use this template for personal or commercial projects.
+MIT
 
-## Support
+## Acknowledgments
 
-If you have any questions or need help, please open an issue on GitHub.
+This project uses Notion as a CMS and Resend for email delivery, providing a simple yet powerful waitlist solution.
