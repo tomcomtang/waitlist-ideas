@@ -73,7 +73,7 @@ npm start
 
 ## 部署
 
-[![Deploy with EdgeOne Pages](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://edgeone.ai/pages/new?from=github&template=waitlist-ideas)
+[![Deploy with EdgeOne Pages](https://cdnstatic.tencentcs.com/edgeone/pages/deploy.svg)](https://console.cloud.tencent.com/edgeone/pages/new?from=childtom&template=waitlist-ideas)
 
 ## 项目结构
 
