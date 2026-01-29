@@ -1,5 +1,6 @@
 import { Client } from "@notionhq/client";
 import { NextResponse } from "next/server";
+import { randomBytes } from "crypto";
 
 export async function POST(request: Request) {
   try {
@@ -61,6 +62,7 @@ export async function POST(request: Request) {
     }
     
     const uniqueId = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+    const token = randomBytes(16).toString("hex");
     const currentTime = new Date().toISOString();
     
     console.log("Creating Notion page with:", {
@@ -109,6 +111,17 @@ export async function POST(request: Request) {
         "Email Sent": {
           type: "checkbox",
           checkbox: false,
+        },
+        Token: {
+          type: "rich_text",
+          rich_text: [
+            {
+              type: "text",
+              text: {
+                content: token,
+              },
+            },
+          ],
         },
       },
     });

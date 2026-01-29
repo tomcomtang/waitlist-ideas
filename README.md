@@ -1,16 +1,17 @@
 # Waitlist Ideas
 
-A modern waitlist landing page built with Next.js 15. Collect user signups, store them in Notion, and send welcome emails automatically.
+This is a template repository for collecting spot registrations (event signups, pre-sale applications, reservation lists, etc.) using Next.js 15, Notion as a CMS, and Resend for sending confirmation emails. Email sending is optional and controlled by the `RESEND_ENABLED` environment variable.
 
 ## Features
 
-- ✅ **Notion Integration**: Automatically save signups to your Notion database
-- ✅ **Email Notifications**: Send beautiful welcome emails via Resend
+- ✅ **Notion Integration**: Save all registrations to your Notion database
+- ✅ **Registration Token**: A unique token is generated per registration and stored in Notion; it is included in the confirmation email as proof of registration (e.g. for check-in or claiming a spot)
+- ✅ **Email Notifications**: Send confirmation emails via Resend (optional, controlled by `RESEND_ENABLED`)
 - ✅ **Duplicate Prevention**: Prevents duplicate email registrations
-- ✅ **Email Tracking**: Tracks whether welcome emails have been sent
+- ✅ **Email Tracking**: Tracks whether a confirmation email has been sent per record
 - ✅ **Modern Design**: Glassmorphism effects with animated background
-- ✅ **Responsive Layout**: Fully responsive design that works on all devices
-- ✅ **Type-Safe**: Built with TypeScript for better developer experience
+- ✅ **Responsive Layout**: Works on all devices
+- ✅ **Type-Safe**: Built with TypeScript
 - ✅ **Real-time Feedback**: Toast notifications for user actions
 
 ## Quick Start
@@ -28,8 +29,11 @@ Create a `.env.local` file in the root directory:
 ```env
 NOTION_SECRET=your_notion_secret_here
 NOTION_DB=your_notion_database_id_here
+RESEND_ENABLED=false
 RESEND_API_KEY=your_resend_api_key_here
 ```
+
+Set `RESEND_ENABLED=true` to enable sending confirmation emails.
 
 ### 3. Set Up Notion Database
 
@@ -40,6 +44,7 @@ RESEND_API_KEY=your_resend_api_key_here
    - **Time**: Date type
    - **ID**: Text type
    - **Email Sent**: Checkbox type
+   - **Token**: Text type (unique token per registration; auto-generated on insert, included in confirmation email as proof of registration)
 3. Create an integration at [Notion Integrations](https://www.notion.so/my-integrations)
 4. Copy the integration secret (this is your `NOTION_SECRET`)
 5. Share your database with the integration
@@ -97,13 +102,13 @@ npm start
 
 ## How It Works
 
-1. **User Signup**: User enters name and email on the landing page
+1. **Registration**: Visitor enters name and email on the page to apply for a spot
 2. **Validation**: Frontend validates email format and required fields
-3. **Notion Storage**: User data is saved to Notion database
-4. **Duplicate Check**: System checks if email already exists before saving
-5. **Email Sending**: Welcome email is sent via Resend (if configured)
-6. **Status Tracking**: Email sent status is tracked in Notion database
-7. **User Feedback**: Toast notifications provide real-time feedback
+3. **Notion Storage**: Registration is saved to your Notion database; a unique **Token** is generated and stored with the record
+4. **Duplicate Check**: System rejects duplicate emails so each spot is claimed once
+5. **Email Sending**: Confirmation email is sent via Resend (if `RESEND_ENABLED=true`), including the token as proof of registration
+6. **Status Tracking**: “Email Sent” is tracked per record in Notion
+7. **User Feedback**: Toast notifications confirm success or show errors
 
 ## Technology Stack
 
@@ -128,15 +133,15 @@ Modify `app/globals.css` to customize the appearance. The design uses:
 
 ### Customizing Email Template
 
-Edit `emails/index.tsx` to customize the welcome email sent to new signups.
+Edit `emails/index.tsx` to customize the confirmation email sent to new registrations. The template receives `userFirstname` and `token`; the token is shown in the email as the registrant’s proof of registration (e.g. for check-in or claiming a spot).
 
 ### API Endpoints
 
-- `POST /api/notion` - Save user signup to Notion
+- `POST /api/notion` - Save a registration to Notion
   - Body: `{ name: string, email: string }`
   - Returns: `{ success: boolean, id?: string, error?: string }`
 
-- `POST /api/mail` - Send welcome email
+- `POST /api/mail` - Send confirmation email
   - Body: `{ email: string, firstname: string }`
   - Returns: `{ message: string, error?: string }`
   - Automatically checks if email was already sent
@@ -147,4 +152,4 @@ MIT
 
 ## Acknowledgments
 
-This project uses Notion as a CMS and Resend for email delivery, providing a simple yet powerful waitlist solution.
+This project uses Notion as a CMS and Resend for email delivery, providing a simple yet powerful spot-registration and application-list solution.

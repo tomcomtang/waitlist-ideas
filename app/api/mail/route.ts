@@ -74,7 +74,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const emailHtml = await render(WaitlistWelcomeEmail({ userFirstname: firstname || "" }));
+    let token = "";
+    if ("properties" in record) {
+      const tokenProp = record.properties.Token ?? record.properties.token;
+      if (tokenProp?.type === "rich_text") {
+        const richText = tokenProp.rich_text;
+        if (Array.isArray(richText) && richText.length > 0 && richText[0].type === "text") {
+          token = richText[0].plain_text;
+        }
+      }
+    }
+
+    const emailHtml = await render(
+      WaitlistWelcomeEmail({ userFirstname: firstname || "", token })
+    );
     
     const fromEmail = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
     const replyToEmail = process.env.RESEND_REPLY_TO || "onboarding@resend.dev";

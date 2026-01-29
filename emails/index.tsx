@@ -14,9 +14,10 @@ import * as React from "react";
 
 interface EmailProps {
   userFirstname: string;
+  token?: string;
 }
 
-export const WaitlistWelcomeEmail = ({ userFirstname }: EmailProps) => (
+export const WaitlistWelcomeEmail = ({ userFirstname, token }: EmailProps) => (
   <Html>
     <Head />
     <Preview>Welcome to Waitlist Ideas, {userFirstname}! 🎉</Preview>
@@ -56,6 +57,21 @@ export const WaitlistWelcomeEmail = ({ userFirstname }: EmailProps) => (
             for the journey!
           </Text>
 
+          {token ? (
+            <>
+              <Text style={paragraph}>
+                Your waitlist token (keep this as your proof of registration):
+              </Text>
+              <Section style={tokenBox}>
+                <Text style={tokenText}>{token}</Text>
+              </Section>
+              <Text style={paragraph}>
+                You may need to show this token when claiming your spot or at
+                check-in.
+              </Text>
+            </>
+          ) : null}
+
           <Text style={signOff}>
             Best regards,
             <br />
@@ -78,6 +94,7 @@ export const WaitlistWelcomeEmail = ({ userFirstname }: EmailProps) => (
 
 WaitlistWelcomeEmail.PreviewProps = {
   userFirstname: "Alex",
+  token: "a1b2c3d4e5f6789012345678abcdef01",
 } as EmailProps;
 
 export default WaitlistWelcomeEmail;
@@ -139,6 +156,22 @@ const list = {
   marginBottom: "16px",
   marginLeft: "20px",
   paddingLeft: "0",
+};
+
+const tokenBox = {
+  backgroundColor: "#262626",
+  borderRadius: "8px",
+  padding: "16px",
+  marginBottom: "16px",
+  border: "1px solid #404040",
+};
+
+const tokenText = {
+  fontSize: "14px",
+  fontFamily: "monospace",
+  color: "#e5e5e5",
+  margin: "0",
+  wordBreak: "break-all" as const,
 };
 
 const signOff = {
